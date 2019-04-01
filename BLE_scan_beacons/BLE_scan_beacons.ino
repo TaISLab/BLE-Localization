@@ -23,7 +23,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("Scanning...");
+  Serial.println("Scanning....");
 
   BLEDevice::init("");
   pBLEScan = BLEDevice::getScan(); //create new scan
