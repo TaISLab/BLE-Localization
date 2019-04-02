@@ -10,13 +10,17 @@
 
 int scanTime = 0; //In seconds
 BLEScan* pBLEScan;
+std::string NameBeacon;
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
       //ORIGINAL Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
       //NEW
-      Serial.printf("Adv: %6d %10s %4d %s \n", millis(), advertisedDevice.getName().c_str(), advertisedDevice.getRSSI(), 
-      advertisedDevice.getAddress().toString().c_str());
+      NameBeacon = advertisedDevice.getName().c_str();
+      if ((NameBeacon[0] == 'B') and  (NameBeacon[1] == 'e') and (NameBeacon[2] == 'a'))
+       // Serial.printf("Adv: %6d %10s %4d %s \n", millis(), advertisedDevice.getName().c_str(), advertisedDevice.getRSSI(),
+       //               advertisedDevice.getAddress().toString().c_str());
+        Serial.printf("Adv: %6d %10s %4d  \n", millis(), advertisedDevice.getName().c_str(), advertisedDevice.getRSSI());
       //NEW
     }
 };
@@ -27,7 +31,7 @@ void setup() {
 
   BLEDevice::init("");
   pBLEScan = BLEDevice::getScan(); //create new scan
-  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks(),true); //want duplicates
+  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks(), true); //want duplicates
   pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
   //pBLEScan->setInterval(100);
   //pBLEScan->setWindow(99);  // less or equal setInterval value
@@ -42,6 +46,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
+  pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
   delay(2000);
 }
